@@ -1,9 +1,9 @@
 /**
  * Contains functions for the sorted vector struct
  *
- * @author: STUDENT ADD YOUR NAME
+ * @author: Harsh Dalal
  * @class: CS 5008
- * @term: UPDATE WITH CURRENT SEMESTER
+ * @term: Fall 2025
 **/
 
 #include "vector.h"
@@ -24,7 +24,11 @@
  * @param movie the movie to add
 */
 void add_to_sorted_vector(SortedMovieVector * vector, Movie * movie) {
-    // STUDENT TODO: implement this function
+    int i = 0;
+    while (i < vector->size && compare_movies(movie, vector->movies[i]) > 0) {
+        i++;
+    }
+    vector_insert(vector, movie, i);
 }
 
 /**
@@ -43,9 +47,19 @@ void add_to_sorted_vector(SortedMovieVector * vector, Movie * movie) {
  * @return the movie if found, NULL otherwise
  */
 Movie * find_in_sorted_vector(SortedMovieVector * vector, const char * title) {
-    // STUDENT TODO: implement this function
-
-    // if the movie is not found, return NULL
+    int low = 0;
+    int high = vector->size - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        int cmp = strcasecmp(title, vector->movies[mid]->title);
+        if (cmp == 0) {
+            return vector->movies[mid];
+        } else if (cmp < 0) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
     return NULL;
 }
 
@@ -65,7 +79,18 @@ Movie * find_in_sorted_vector(SortedMovieVector * vector, const char * title) {
  * @return the movie removed, NULL otherwise
  */
 Movie* sorted_vector_remove(SortedMovieVector *vector, const char *title){
-    // STUDENT TODO: implement this function
-
+    int low = 0;
+    int high = vector->size - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        int cmp = strcasecmp(title, vector->movies[mid]->title);
+        if (cmp == 0) {
+            return vector_remove(vector, mid);
+        } else if (cmp < 0) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
     return NULL; // not found
 }
